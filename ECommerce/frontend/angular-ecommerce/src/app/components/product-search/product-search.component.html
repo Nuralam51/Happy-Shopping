@@ -1,0 +1,6 @@
+<div class="d-flex" style="margin-left: 20rem;">
+    <input #myInput type="text" class="form-control" 
+            placeholder="Search" style="width: 50rem;"
+            (keyup.enter)="doSearch(myInput.value)">
+    <button class="btn btn-outline-primary" (click)="doSearch(myInput.value)"><span data-feather="search"></span></button>
+</div>

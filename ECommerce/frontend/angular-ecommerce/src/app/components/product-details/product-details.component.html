@@ -1,0 +1,116 @@
+<section class="mb-5">
+    <div class="row mt_5">
+        <h2 class="primary-heading">Product Details</h2>
+        <hr>
+        <div class="col-md-6 mb-4 mb-md-0 mt-1">
+            <div class="mdb-lightbox">
+                <div class="row product-gallery mx-1">
+                    <div class="col-12 mb-0">
+                        <figure class="view overlay rounded z-depth-1 shadow">
+                            <img class="img-fluid w-100" src="{{ product.imageURL }}" alt="Sample">
+                            <a href="#!">
+                                <div class="mask">
+                                    <img class="img-fluid w-100" src="{{ product.alterImageURL }}">
+                                    <div class="mask rgba-black-slight"></div>
+                                </div>
+                            </a>
+                        </figure>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <h4>{{ product.name }}</h4>
+            <h5><span class="mt-2 mr-1"><strong>{{ product.unitPrice | currency:'USD' }}</strong></span></h5>
+            <p class="pt-1">{{ product.description }}</p>
+            <div class="table-responsive">
+                <table class="table table-sm table-borderless mb-0">
+                    <tbody>
+                        <tr>
+                            <th class="pl-0 w-25" scope="row"><strong>Model</strong></th>
+                            <td>{{ product.sku }}</td>
+                        </tr>
+                        <tr>
+                            <th class="pl-0 w-25" scope="row"><strong>Delivery</strong></th>
+                            <td>Bangladesh</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <hr>
+            <div class="table-responsive mb-2">
+                <table class="table table-sm table-borderless">
+                    <tbody>
+                        <tr>
+                            <td class="pl-0 pb-0 w-25">Quantity</td>
+                        </tr>
+                        <tr>
+                            <td class="pl-0">
+                                <div class="input-group" style="width: 35%;">
+                                    <button onclick="this.parentNode.querySelector('input[type=number]').stepDown()"
+                                        (click)="decrement(quantity)" class="btn btn-outline-danger minus"><i
+                                            class="fas fa-minus"></i></button>
+                                    <input class="form-control quantity text-center" min="1" name="quantity" value="1"
+                                        type="number">
+                                    <button onclick="this.parentNode.querySelector('input[type=number]').stepUp()"
+                                        (click)="increment(quantity)" class="btn btn-outline-success plus"><i
+                                            class="fas fa-plus"></i></button>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <table class="mb-2">
+                    <tbody>
+                        <tr>Select Size</tr>
+                        <tr>
+                            <td>
+                                <div class="mt-1 d-flex">
+                                    <div class="form-check form-check-inline pl-0">
+                                        <input type="radio" class="form-check-input" id="small" name="size" value="S"
+                                            (click)="sizeOfProduct('S')">
+                                        <label class="form-check-label small text-uppercase card-link-secondary"
+                                            for="small">S</label>
+                                    </div>
+                                    <div class="form-check form-check-inline pl-0">
+                                        <input type="radio" class="form-check-input" id="medium" name="size" value="M"
+                                            (click)="sizeOfProduct('M')" checked>
+                                        <label class="form-check-label small text-uppercase card-link-secondary"
+                                            for="medium">M</label>
+                                    </div>
+                                    <div class="form-check form-check-inline pl-0">
+                                        <input type="radio" class="form-check-input" id="large" name="size" value="L"
+                                            (click)="sizeOfProduct('L')">
+                                        <label class="form-check-label small text-uppercase card-link-secondary"
+                                            for="large">L</label>
+                                    </div>
+                                    <div class="form-check form-check-inline pl-0">
+                                        <input type="radio" class="form-check-input" id="extralarge" name="size"
+                                            value="XL" (click)="sizeOfProduct('XL')">
+                                        <label class="form-check-label small text-uppercase card-link-secondary"
+                                            for="extralarge">XL</label>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <button type="button" class="btn btn-outline-success me-2 mr-1 mb-2" (click)="addToCart(product)">
+                <i class="fas fa-shopping-cart pr-2"></i> Add to cart</button>
+            <button type="button" class="btn btn-outline-danger mr-1 mb-2"><i class="far fa-heart"></i>
+                Wishlist</button>
+        </div>
+    </div>
+    <div class="text-center mt-3">
+        <a routerLink="/product">Back to product list</a>
+    </div>
+</section>
+<script>
+    $(document).ready(function () {
+        // MDB Lightbox Init
+        $(function () {
+            $("#mdb-lightbox-ui").load("mdb-addons/mdb-lightbox-ui.html");
+        });
+    });
+</script>

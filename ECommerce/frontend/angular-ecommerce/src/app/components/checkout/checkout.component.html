@@ -1,0 +1,361 @@
+<section class="mb-5">
+    <div class="row mt_5">
+        <h2 class="primary-heading">Checkout</h2>
+        <hr>
+        <div class="col-md-5 col-lg-4 order-md-last">
+            <h4 class="d-flex justify-content-between align-items-center mb-3">
+                <span class="text-muted">Review your cart</span>
+                <span class="badge bg-danger rounded-pill">{{ totalQuantity }}</span>
+            </h4>
+            <ul class="list-group mb-3">
+                <li class="list-group-item d-flex justify-content-between lh-sm">
+                    <div>
+                        <h6 class="my-0">Total Price</h6>
+                        <small class="text-muted">All product price</small>
+                    </div>
+                    <span class="text-muted">{{ totalPrice | currency: 'USD' }}</span>
+                </li>
+                <li class="list-group-item d-flex justify-content-between lh-sm">
+                    <div>
+                        <h6 class="my-0">Shipping</h6>
+                        <small class="text-muted">cost of shipping is almost free</small>
+                    </div>
+                    <span class="text-muted">Free</span>
+                </li>
+                <!-- <li class="list-group-item d-flex justify-content-between bg-light">
+                    <div class="text-success">
+                        <h6 class="my-0">Promo code</h6>
+                    </div>
+                    <span class="text-success">−$5</span>
+                </li> -->
+                <li class="list-group-item d-flex justify-content-between">
+                    <span>Grand Total</span>
+                    <strong>{{ totalPrice | currency: 'USD' }}</strong>
+                </li>
+            </ul>
+        </div>
+        <div class="col-md-7 col-lg-8">
+            <h4 class="mb-3">Customer Information</h4>
+            <form [formGroup]="checkoutFormGroup" (ngSubmit)="purchase()">
+                <!-- customer info -->
+                <div class="row" formGroupName="customer">
+                    <div class="col-sm-6">
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control" placeholder="firstname" formControlName="firstName" id="validationServer01"
+                                required>
+                            <label for="floatingInput">Firstname</label>
+                        </div>
+                        <div *ngIf="firstName.invalid && (firstName.dirty || firstName.touched)">
+                            <div *ngIf="firstName.errors.required || firstName.errors.notOnlyWhitespace" class="invalid">
+                                Firstname is required.
+                            </div>
+                            <div *ngIf="firstName.errors.minlength" class="invalid">
+                                Firstname must be at least 2 character long.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6">
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control" placeholder="lastname" formControlName="lastName" id="validationServer02"
+                                required>
+                            <label for="floatingInput">Last Name</label>
+                        </div>
+                        <div *ngIf="lastName.invalid && (lastName.dirty || lastName.touched)">
+                            <div *ngIf="lastName.errors.required || lastName.errors.notOnlyWhitespace" class="invalid">
+                                Lastname is required.
+                            </div>
+                            <div *ngIf="lastName.errors.minlength" class="invalid">
+                                Lastname must be at least 2 character long.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-12">
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control" placeholder="mobile" formControlName="mobileNo" id="validationServer03"
+                                required>
+                            <label for="floatingInput">Mobile no</label>
+                        </div>
+                        <div *ngIf="mobileNo.invalid && (mobileNo.dirty || mobileNo.touched)">
+                            <div *ngIf="mobileNo.errors.required" class="invalid">
+                                Mobile no is required.
+                            </div>
+                            <div *ngIf="mobileNo.errors.pattern" class="invalid">
+                                MobileNo must be at least 11 character long.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-12">
+                        <div class="form-floating mb-3">
+                            <input type="email" class="form-control" placeholder="email" formControlName="email" id="validationServer04"
+                                required>
+                            <label for="floatingInput">Email</label>
+                        </div>
+                        <div *ngIf="email.invalid && (email.dirty || email.touched)">
+                            <div *ngIf="email.errors.required" class="invalid">
+                                Please enter a valid email address for shipping updates.
+                            </div>
+                            <div *ngIf="email.errors.pattern" class="invalid">
+                                Email must be valid email address format.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <hr class="my-4">
+                <!-- shipping address -->
+                <h4 class="mb-3">Shipping Address</h4>
+                <div class="row" formGroupName="shippingAddress">
+                    <div class="col-md-6">
+                        <div class="form-floating mb-3">
+                            <select class="form-select" formControlName="country"
+                                (change)="getStates('shippingAddress')">
+                                <option *ngFor="let country of countries" [ngValue]="country">
+                                    {{ country.name }}
+                                </option>
+                            </select>
+                            <label for="floatingSelect">Country</label>
+                        </div>
+                        <div *ngIf="shippingCountry.invalid && (shippingCountry.dirty || shippingCountry.touched)">
+                            <div *ngIf="shippingCountry.errors.required" class="invalid">
+                                Please select a valid country.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-floating mb-3">
+                            <select class="form-select" aria-label="Floating label select example"
+                                formControlName="state">
+                                <option *ngFor="let state of shippingAddressStates" [ngValue]="state">
+                                    {{ state.name }}
+                                </option>
+                            </select>
+                            <label for="floatingSelect">State</label>
+                        </div>
+                        <div *ngIf="shippingState.invalid && (shippingState.dirty || shippingState.touched)">
+                            <div *ngIf="shippingState.errors.required" class="invalid">
+                                Please select a valid state.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control" placeholder="city" formControlName="city" required>
+                            <label for="floatingInput">City</label>
+                        </div>
+                        <div *ngIf="shippingCity.invalid && (shippingCity.dirty || shippingCity.touched)">
+                            <div *ngIf="shippingCity.errors.required || shippingCity.errors.notOnlyWhitespace" class="invalid">
+                                City code required
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control" placeholder="zip" formControlName="zip" required>
+                            <label for="floatingInput">ZIP</label>
+                        </div>
+                        <div *ngIf="shippingZip.invalid && (shippingZip.dirty || shippingZip.touched)">
+                            <div *ngIf="shippingZip.errors.required" class="invalid">
+                                ZIP code required
+                            </div>
+                            <div *ngIf="shippingZip.errors.pattern" class="invalid">
+                                ZIP must be 4 character long.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="form-floating mb-3">
+                            <textarea type="text" class="form-control" placeholder="address" formControlName="address"
+                                style="height: 100px" required></textarea>
+                            <label for="floatingInput">Address</label>
+                        </div>
+                        <div *ngIf="shippingAddress.invalid && (shippingAddress.dirty || shippingAddress.touched)">
+                            <div *ngIf="shippingAddress.errors.required || shippingAddress.errors.notOnlyWhitespace" class="invalid">
+                                Please enter your shipping address
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <hr class="my-4">
+                <div class="form-check">
+                    <input type="checkbox" class="form-check-input" id="same-address"
+                        (change)="copyShippingAddressToBillingAddress($event)">
+                    <label class="form-check-label" for="same-address">Shipping address is the same as my billing
+                        address</label>
+                </div>
+                <hr class="my-4">
+                <!-- billing address -->
+                <h4 class="mb-3">Billing address</h4>
+                <div class="row" formGroupName="billingAddress">
+                    <div class="col-md-6">
+                        <div class="form-floating mb-3">
+                            <select class="form-select" aria-label="Floating label select example"
+                                formControlName="country" (change)="getStates('billingAddress')">
+                                <option *ngFor="let country of countries" [ngValue]="country">
+                                    {{ country.name }}
+                                </option>
+                            </select>
+                            <label for="floatingSelect">Country</label>
+                        </div>
+                        <div *ngIf="billingCountry.invalid && (billingCountry.dirty || billingCountry.touched)">
+                            <div *ngIf="billingCountry.errors.required" class="invalid">
+                                Please select a valid country.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-floating mb-3">
+                            <select class="form-select" aria-label="Floating label select example"
+                                formControlName="state">
+                                <option *ngFor="let state of billingAddressStates" [ngValue]="state">
+                                    {{ state.name }}
+                                </option>
+                            </select>
+                            <label for="floatingSelect">State</label>
+                        </div>
+                        <div *ngIf="billingState.invalid && (billingState.dirty || billingState.touched)">
+                            <div *ngIf="billingState.errors.required" class="invalid">
+                                Please select a valid state.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control" placeholder="city" formControlName="city" required>
+                            <label for="floatingInput">City</label>
+                        </div>
+                        <div *ngIf="billingCity.invalid && (billingCity.dirty || billingCity.touched)">
+                            <div *ngIf="billingCity.errors.required || billingCity.errors.notOnlyWhitespace" class="invalid">
+                                City code required
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control" placeholder="zip" formControlName="zip" required>
+                            <label for="floatingInput">ZIP</label>
+                        </div>
+                        <div *ngIf="billingZip.invalid && (billingZip.dirty || billingZip.touched)">
+                            <div *ngIf="billingZip.errors.required" class="invalid">
+                                ZIP code required
+                            </div>
+                            <div *ngIf="billingZip.errors.pattern" class="invalid">
+                                ZIP must be 4 character long.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="form-floating mb-3">
+                            <textarea type="text" class="form-control" placeholder="address" formControlName="address"
+                                style="height: 100px" required></textarea>
+                            <label for="floatingInput">Address</label>
+                        </div>
+                        <div *ngIf="billingAddress.invalid && (billingAddress.dirty || billingAddress.touched)">
+                            <div *ngIf="billingAddress.errors.required || billingAddress.errors.notOnlyWhitespace" class="invalid">
+                                Please enter your billing address
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <hr class="my-4">
+                <!-- card section -->
+                <h4 class="mb-3">Payment</h4>
+                <div class="row" formGroupName="card">
+                    <div class="col-md-4">
+                        <div class="form-floating mb-3">
+                            <select class="form-select" aria-label="Floating label select example"
+                                formControlName="cardType">
+                                <option value="Visa card">Visa card</option>
+                                <option value="Credit Card">Credit Card</option>
+                                <option value="Mastercard">Mastercard</option>
+                            </select>
+                            <label for="floatingSelect">Card Type</label>
+                        </div>
+                        <div *ngIf="cardType.invalid && (cardType.dirty || cardType.touched)">
+                            <div *ngIf="cardType.errors.required" class="invalid">
+                                Card type is required
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control" placeholder="Name of card"
+                                formControlName="cardName" required>
+                            <small class="text-muted">Full name as displayed on card</small>
+                            <label for="floatingInput">Name of card</label>
+                        </div>
+                        <div *ngIf="cardName.invalid && (cardName.dirty || cardName.touched)">
+                            <div *ngIf="cardName.errors.required || cardName.errors.notOnlyWhitespace" class="invalid">
+                                Name on card is required
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-12">
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control" placeholder="cardno" formControlName="cardNumber"
+                                required>
+                            <label for="floatingInput">Credit card number</label>
+                        </div>
+                        <div *ngIf="cardNumber.invalid && (cardNumber.dirty || cardNumber.touched)">
+                            <div *ngIf="cardNumber.errors.required" class="invalid">
+                                Credit card number is required
+                            </div>
+                            <div *ngIf="cardNumber.errors.pattern" class="invalid">
+                                Card number must be 16 character long.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="form-floating mb-3">
+                            <select class="form-select" aria-label="Floating label select example"
+                                formControlName="expirationMonth">
+                                <option *ngFor="let months of creditCardMonths">{{ months }}</option>
+                            </select>
+                            <label for="floatingInput">Expiration Month</label>
+                        </div>
+                        <div *ngIf="expirationMonth.invalid && (expirationMonth.dirty || expirationMonth.touched)">
+                            <div *ngIf="expirationMonth.errors.required" class="invalid">
+                                Expiration month required
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="form-floating mb-3">
+                            <select class="form-select" aria-label="Floating label select example"
+                                formControlName="expirationYear" (change)="handleMonthAndYear()">
+                                <option *ngFor="let years of creditCardYears">{{ years }}</option>
+                            </select>
+                            <label for="floatingInput">Expiration Year</label>
+                        </div>
+                        <div *ngIf="expirationYear.invalid && (expirationYear.dirty || expirationYear.touched)">
+                            <div *ngIf="expirationYear.errors.required" class="invalid">
+                                Expiration year required
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control" id="floatingInput" placeholder="CVV"
+                                formControlName="cvv" required>
+                            <label for="floatingInput">CVV</label>
+                        </div>
+                        <div *ngIf="cvv.invalid && (cvv.dirty || cvv.touched)">
+                            <div *ngIf="cvv.errors.required" class="invalid">
+                                Security code required
+                            </div>
+                            <div *ngIf="cvv.errors.pattern" class="invalid">
+                                Security code must be 3 character long.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <button class="w-100 btn btn-outline-success mt-3" type="submit">Purchase</button>
+            </form>
+        </div>
+    </div>
+</section>

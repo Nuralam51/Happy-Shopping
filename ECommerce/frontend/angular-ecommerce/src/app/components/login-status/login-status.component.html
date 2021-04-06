@@ -1,0 +1,15 @@
+<div class="d-flex">
+    <!-- <div *ngIf="isAuthenticated && userFullName" class="me-3 mt-1">
+        <span>Welcome back, {{ userFullName }}</span>
+    </div> -->
+    <div class="dropdown mt-1">
+        <div *ngIf="isAuthenticated && userFullName" class="dropdown-toggle" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false">
+            <span>Welcome back, {{ userFullName }}</span>
+        </div>
+        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton2">
+            <li><a class="dropdown-item" routerLink="/order-history">Order History</a></li>
+            <li><a href="" class="dropdown-item" *ngIf="isAuthenticated" (click)="logout()">Logout</a></li>
+        </ul>
+    </div>
+    <button class="btn btn-outline-primary btn-sm" *ngIf="!isAuthenticated" routerLink="/login"> Login</button>
+</div>

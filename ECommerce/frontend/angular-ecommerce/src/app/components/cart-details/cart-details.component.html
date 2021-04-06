@@ -1,0 +1,136 @@
+<section class="mb-5">
+    <div class="row mt_5">
+        <h2 class="primary-heading">Cart Items</h2>
+        <hr>
+        <div class="col-lg-8" *ngIf="cartItems.length > 0">
+            <div class="mb-3">
+                <div class="wish-list">
+                    <h5 class="justify-content-between align-items-center mb-3">
+                        <span class="text-muted me-2">Your cart</span>
+                        <span class="badge bg-danger rounded-pill">{{ totalQuantity }}</span>
+                    </h5>
+                    <div class="row mb-4 mt-3" *ngFor="let tempCartDetails of cartItems">
+                        <div class="col-md-5 col-lg-3 col-xl-3">
+                            <div class="view zoom overlay z-depth-1 rounded mb-3 mb-md-0">
+                                <img class="img-fluid w-100"
+                                    src="{{ tempCartDetails.imageUrl }}"
+                                    alt="Sample">
+                                <a href="#!">
+                                    <div class="mask">
+                                        <img class="img-fluid w-100"
+                                            src="{{ tempCartDetails.alterImageUrl }}">
+                                        <div class="mask rgba-black-slight"></div>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="col-md-7 col-lg-9 col-xl-9">
+                            <div>
+                                <div class="d-flex justify-content-between">
+                                    <div>
+                                        <h5>{{ tempCartDetails.name }}</h5>
+                                        <p class="mb-3 text-muted text-uppercase small">Size: {{ tempCartDetails.size }}</p>
+                                    </div>
+                                    <div>
+                                        <div class="input-group" style="width: 40%;float: right;">
+                                            <button
+                                                onclick="this.parentNode.querySelector('input[type=number]').stepDown()"
+                                                (click)="decrementQuantity(tempCartDetails)" class="btn btn-outline-danger minus"><i
+                                                    class="fas fa-minus"></i></button>
+                                            <input class="form-control quantity text-center" min="1" name="quantity"
+                                                value="{{ tempCartDetails.quantity }}" type="number">
+                                            <button
+                                                onclick="this.parentNode.querySelector('input[type=number]').stepUp()"
+                                                (click)="incrementQuantity(tempCartDetails)" class="btn btn-outline-success plus"><i
+                                                    class="fas fa-plus"></i></button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="d-flex justify-content-between align-items-center"
+                                    style="padding-top: 2.2rem;">
+                                    <div class="d-flex wish-list">
+                                        <a type="button" (click)="removeProduct(tempCartDetails)"
+                                            class="nav-link card-link-secondary small text-uppercase mr-3">
+                                            <i class="fas fa-trash trash mr-1"></i> Remove item </a>
+                                        <a href="#!" type="button"
+                                            class="nav-link card-link-secondary small text-uppercase">
+                                            <i class="fas fa-heart heart mr-1"></i> Move to wish list </a>
+                                    </div>
+                                    <p class="mb-0"><span><strong id="summary">{{ tempCartDetails.unitPrice | currency:'USD' }} * {{ tempCartDetails.quantity }}</strong></span></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <hr class="mb-4">
+                    <p class="text-primary mb-0"><i class="fas fa-info-circle mr-1"></i> Do not delay the purchase,
+                        adding
+                        items to your cart does not mean booking them.</p>
+                </div>
+            </div>
+            <div class="mb-3 accept-card">
+                <div class="pt-4">
+                    <h5 class="mb-4">We accept</h5>
+                    <img class="mr-2" width="45px"
+                        src="https://mdbootstrap.com/wp-content/plugins/woocommerce-gateway-stripe/assets/images/visa.svg"
+                        alt="Visa">
+                    <img class="mr-2" width="45px"
+                        src="https://mdbootstrap.com/wp-content/plugins/woocommerce-gateway-stripe/assets/images/amex.svg"
+                        alt="American Express">
+                    <img class="mr-2" width="45px"
+                        src="https://mdbootstrap.com/wp-content/plugins/woocommerce-gateway-stripe/assets/images/mastercard.svg"
+                        alt="Mastercard">
+                    <img class="mr-2" width="45px"
+                        src="https://mdbootstrap.com/wp-content/plugins/woocommerce/includes/gateways/paypal/assets/images/paypal.png"
+                        alt="PayPal acceptance mark">
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4" *ngIf="cartItems.length > 0">
+            <div class="mb-3 border">
+                <div class="pt-1">
+                    <h5 class="mb-3">The total amount of</h5>
+                    <ul class="list-group list-group-flush">
+                        <li
+                            class="list-group-item d-flex justify-content-between align-items-center border-0 px-0 pb-0">
+                            Total amount <span>{{ totalPrice | currency:'USD' }}</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center px-0">
+                            Shipping <span>Free</span>
+                        </li>
+                        <li
+                            class="list-group-item d-flex justify-content-between align-items-center border-0 px-0 mb-3">
+                            <div>
+                                <strong>Grand total</strong>
+                                <strong>
+                                    <p class="mb-0">(including VAT)</p>
+                                </strong>
+                            </div>
+                            <span><strong>{{ totalPrice | currency:'USD' }}</strong></span>
+                        </li>
+                    </ul>
+                        <a routerLink="/checkout" type="button" class="w-100 btn btn-outline-primary">Checkout</a>
+                </div>
+            </div>
+            <div class="mb-3 border">
+                <div class="pt-1">
+                    <a class="dark-grey-text d-flex justify-content-between" data-bs-toggle="collapse"
+                        href="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+                        Add a discount code (optional)
+                        <span><i class="fas fa-chevron-down pt-1"></i></span>
+                    </a>
+                    <div class="collapse" id="collapseExample">
+                        <div class="mt-3">
+                            <div class="md-form md-outline mb-0">
+                                <input type="text" id="discount-code" class="form-control font-weight-light"
+                                    placeholder="Enter discount code">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div *ngIf="cartItems?.length == 0" class="alert alert-warning" role="alert">
+            Your shopping cart is empty!
+        </div>
+    </div>
+</section>

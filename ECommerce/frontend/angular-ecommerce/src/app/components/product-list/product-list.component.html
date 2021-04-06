@@ -1,0 +1,28 @@
+<section>
+    <div class="row mt_5 mb-5">
+        <h2 class="primary-heading">Product lists</h2>
+        <hr>
+        <div class="col-md-4 mb-4 mt-1" *ngFor="let tempProduct of productList">
+            <div class="view zoom overlay z-depth-2 rounded shadow">
+                <img class="img-fluid w-100" src="{{ tempProduct.imageURL }}" alt="Sample">
+                <a routerLink="/products/{{ tempProduct.id }}">
+                    <div class="mask waves-effect waves-light">
+                        <img class="img-fluid w-100" src="{{ tempProduct.alterImageURL }}">
+                        <div class="mask rgba-black-slight"></div>
+                    </div>
+                </a>
+            </div>
+            <div class="text-center pt-4">
+                <h5>{{ tempProduct.name }}</h5>
+                <p><span class="me-1">{{ tempProduct.unitPrice | currency:'USD' }}</span></p>
+                <hr>
+                <button class="btn btn-outline-primary btn-sm" (click)="addToCart(tempProduct)">
+                    <span data-feather="shopping-cart"></span> Add to cart
+                </button>
+            </div>
+        </div>
+        <div *ngIf="productList?.length == 0" class="alert alert-warning" role="alert">
+            No product found!
+        </div>
+    </div>
+</section>
